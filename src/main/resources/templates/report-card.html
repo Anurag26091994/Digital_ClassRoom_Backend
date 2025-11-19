@@ -1,0 +1,97 @@
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title th:text="'Report Card - ' + ${rc.term}">Report Card</title>-->
+<!--    <link rel="stylesheet" th:href="@{/css/report-card.css}" />-->
+<!--    <style>-->
+<!--        /* quick inline fallback */-->
+<!--        body { font-family: Arial, sans-serif; margin: 18px; }-->
+<!--        .center { text-align:center }-->
+<!--        table { width:100%; border-collapse: collapse; margin-top:10px; }-->
+<!--        th, td { border:1px solid #333; padding:8px; text-align:center; }-->
+<!--        th { background:#f2f2f2; }-->
+<!--        .section-title { font-weight:bold; margin-top:18px; margin-bottom:6px; text-decoration:underline; }-->
+<!--        .signature { margin-top:30px; display:flex; justify-content:space-between; }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+
+<!--<div class="center">-->
+<!--    <h1 th:text="${rc.schoolName}">ABC International School</h1>-->
+<!--    <p th:text="${rc.schoolAddress}">Address: 123 School Road, Pune, India</p>-->
+<!--    <h3 th:text="'Term: ' + ${rc.term}">Term: Mid-Term 2025</h3>-->
+<!--</div>-->
+
+<!--<div class="section-title">Student Details</div>-->
+<!--<table>-->
+<!--    <tr>-->
+<!--        <td><b>Name:</b> <span th:text="${rc.studentName}">Rahul Sharma</span></td>-->
+<!--        <td><b>Class:</b> <span th:text="${rc.className}">10A</span></td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--        <td><b>Roll No:</b> <span th:text="${rc.rollNo}">23</span></td>-->
+<!--        <td><b>Admission No:</b> <span th:text="${rc.admissionNo}">2021-45</span></td>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--        <td colspan="2"><b>Academic Year:</b> <span th:text="${rc.academicYear}">2025–26</span></td>-->
+<!--    </tr>-->
+<!--</table>-->
+
+<!--<div class="section-title">Exam Results</div>-->
+<!--<table>-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th>Subject</th>-->
+<!--        <th>Max Marks</th>-->
+<!--        <th>Obtained Marks</th>-->
+<!--        <th>Percentage</th>-->
+<!--        <th>Grade</th>-->
+<!--        <th>Remarks</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr th:each="s : ${rc.subjects}">-->
+<!--        <td th:text="${s.subjectName}">Mathematics</td>-->
+<!--        <td th:text="${s.totalMarks}">100</td>-->
+<!--        <td th:text="${s.obtainedMarks}">78</td>-->
+<!--        <td th:text="${s.percentage} + '%'">78%</td>-->
+<!--        <td th:text="${s.grade}">A</td>-->
+<!--        <td th:text="${s.remarks}">Excellent</td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+
+<!--<div class="section-title">Summary</div>-->
+<!--<table>-->
+<!--    <tr><td><b>Total Marks</b></td><td th:text="${rc.totalMarks}">500</td></tr>-->
+<!--    <tr><td><b>Obtained Marks</b></td><td th:text="${rc.totalObtained}">343</td></tr>-->
+<!--    <tr><td><b>Percentage</b></td><td th:text="${rc.overallPercentage} + '%'">68.6%</td></tr>-->
+<!--    <tr><td><b>Grade</b></td><td th:text="${rc.overallGrade}">B</td></tr>-->
+<!--    <tr><td><b>Result Status</b></td><td th:text="${rc.resultStatus}">PASS</td></tr>-->
+<!--</table>-->
+
+<!--<div class="section-title">Attendance</div>-->
+<!--<table>-->
+<!--    <tr><td><b>Attendance %</b></td><td th:text="${rc.attendancePercent}">92%</td></tr>-->
+<!--    <tr><td><b>Leaves Taken</b></td><td th:text="${rc.leavesTaken}">3</td></tr>-->
+<!--</table>-->
+
+<!--<div class="section-title">Teacher Remarks</div>-->
+<!--<p th:text="${rc.teacherRemarks}">Rahul has shown ...</p>-->
+
+<!--<div class="signature">-->
+<!--    <div>Class Teacher: ____________________</div>-->
+<!--    <div>Principal: ____________________</div>-->
+<!--</div>-->
+
+<!--<p th:text="'Date: ' + ${rc.generatedDate}">Date: 15-Sep-2025</p>-->
+
+<!--<div style="margin-top:12px">-->
+<!--    <a th:href="@{|/api/student/${rc.term}/download?studentRegId=${rc.studentRegId}|}">-->
+<!--        Download PDF-->
+<!--    </a>-->
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->
