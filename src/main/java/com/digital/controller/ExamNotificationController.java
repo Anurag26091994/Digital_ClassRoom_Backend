@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/notifications")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class ExamNotificationController {
   private final ExamNotificationRepository examNotificationRepository;
 

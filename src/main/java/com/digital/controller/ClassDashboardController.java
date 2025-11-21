@@ -27,6 +27,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/dashboard")
+@CrossOrigin("*")
 public class ClassDashboardController {
 
     private final TeacherService teacherService;

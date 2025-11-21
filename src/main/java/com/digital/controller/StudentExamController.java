@@ -62,6 +62,7 @@ import com.itextpdf.io.font.constants.StandardFonts;
 @RestController
 @RequestMapping("/api/student")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class StudentExamController {
     private final ReportCardService reportCardService;
     private final StudentExamService studentExamService;

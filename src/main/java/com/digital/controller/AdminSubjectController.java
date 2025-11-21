@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/admin/subjects")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class AdminSubjectController {
 
     private final SubjectService subjectService;

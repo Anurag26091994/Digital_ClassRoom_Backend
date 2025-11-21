@@ -17,6 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/admin/parents")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class AdminParentController {
     private final ParentService parentService;
 
