@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/admin/books")
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('LIBRARIAN')")
+@CrossOrigin("*")
 public class AdminLibraryController {
 
     private final BookService bookService;

@@ -15,6 +15,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/ptm")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class PTMController {
 
     private final PTMService ptmService;

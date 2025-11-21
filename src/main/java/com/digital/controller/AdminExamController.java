@@ -18,6 +18,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/admin/exams")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class AdminExamController {
 
     private final ExamService examService;

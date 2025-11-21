@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/library")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class LibraryMemberController {
 
     private final BookService bookService;

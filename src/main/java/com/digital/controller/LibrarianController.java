@@ -19,6 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/adminLibrarian")
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class LibrarianController {
 
     private final IssueService issueService;

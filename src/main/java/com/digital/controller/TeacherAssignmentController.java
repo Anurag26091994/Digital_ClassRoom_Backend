@@ -20,6 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/teacher/assignments")
+@CrossOrigin("*")
 public class TeacherAssignmentController {
 
     @Autowired
