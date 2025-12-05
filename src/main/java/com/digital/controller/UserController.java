@@ -4,8 +4,10 @@ import com.digital.dto.EmailDto;
 import com.digital.dto.ManagerStatusDto;
 import com.digital.dto.ResetPasswordDto;
 import com.digital.entity.User;
+import com.digital.exception.BadRequestException;
 import com.digital.servicei.UserServiceI;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,6 +17,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
+@Slf4j
 @RequestMapping("/api/user")
 public class UserController {
 
@@ -27,8 +30,9 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
-    public ResponseEntity<String> createNewUser(@Valid @RequestBody User user) {
-        String response = userServiceI.add(user);
+    public ResponseEntity<User> createNewUser(@Valid @RequestBody User user) throws BadRequestException {
+        log.info("API Hit: Register User");
+        User response = userServiceI.add(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -49,11 +53,15 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/status/{userId}")
-    public ResponseEntity<String> manageUserStatus(
+    public ResponseEntity<?> manageUserStatus(
             @PathVariable Long userId,
             @Valid @RequestBody ManagerStatusDto manageStatusDto
     ) {
-        String response = userServiceI.manageUserStatus(userId, manageStatusDto);
+        log.info("API Hit: Approve User ID {}", userId);
+        User response = userServiceI.manageUserStatus(userId, manageStatusDto);
+        if (response == null) {
+            return ResponseEntity.ok("Student rejected successfully");
+        }
         return ResponseEntity.ok(response);
     }
 

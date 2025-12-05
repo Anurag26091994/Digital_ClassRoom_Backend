@@ -4,12 +4,13 @@ import com.digital.dto.EmailDto;
 import com.digital.dto.ManagerStatusDto;
 import com.digital.dto.ResetPasswordDto;
 import com.digital.entity.User;
+import com.digital.exception.BadRequestException;
 
 import java.util.List;
 
 public interface UserServiceI {
 
-   String add(User user);
+   User add(User user) throws BadRequestException;
 
    void updateUser(User user);
 
@@ -19,7 +20,7 @@ public interface UserServiceI {
 
    String resetPassword(ResetPasswordDto resetPasswordDto);
 
-   String manageUserStatus(Long userId, ManagerStatusDto manageStatusDto);
+   User manageUserStatus(Long userId, ManagerStatusDto manageStatusDto);
 
     List<User> getAllUsers();
 

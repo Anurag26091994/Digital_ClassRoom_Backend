@@ -15,4 +15,7 @@ public class ManagerStatusDto {
     @NotNull(message = "Status is required")
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    private boolean approved;
+
 }

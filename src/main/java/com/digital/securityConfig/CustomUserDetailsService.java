@@ -31,7 +31,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         // Special case: hardcoded admin
-        if (username.equals("admin@school.com")) {
+        if (username.equals("apdhanorkar94@gmail.com")) {
             Admin admin = adminRepository.findByUsername(username)
                     .orElseThrow(() -> new ResourceNotFoundException("Admin record not found for username: " + username));
 

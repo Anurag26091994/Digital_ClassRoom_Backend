@@ -12,7 +12,7 @@ import lombok.Data;
 public class RequestDto {
 
     @NotBlank(message = "Username is required")
-    @Size(min = 4, max = 20, message = "Username must be between 4 to 20 characters")
+    @Size(min = 4, max = 50, message = "Username must be between 4 to 50 characters")
     @Column(unique = true, nullable = false)
     private String username;
 
