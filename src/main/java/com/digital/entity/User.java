@@ -47,6 +47,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    private boolean approved = false; // extra flag if needed
+
     private LocalDateTime lastLogin;
 
     private String otp;
@@ -59,7 +61,7 @@ public class User {
     @PrePersist
     public void onCreate(){
         this.createdAt = LocalDateTime.now();
-        this.status = Status.ACTIVE;
+        this.status = Status.INACTIVE;
     }
 
     @PreUpdate
