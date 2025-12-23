@@ -25,6 +25,4 @@ public interface UserServiceI {
     List<User> getAllUsers();
 
    User getUserById(Long userId);
-
-    User findUserByEmail(String name);
 }
