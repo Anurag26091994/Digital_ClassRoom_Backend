@@ -43,15 +43,17 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         // Otherwise, load a regular user
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User record not found for username: " + username));
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User record not found for email: " + username)
+                );
 
         if (user.getStatus() == Status.INACTIVE) {
             throw new AuthorizationDeniedException("Inactive users cannot login");
         }
 
         return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
+                user.getEmail(),
                 user.getPassword(),
                 getAuthorities(user)
         );

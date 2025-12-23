@@ -24,84 +24,109 @@ import java.util.Map;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping(value = "/api/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-
     private final JwtService jwtService;
-
     private final UserServiceI userServiceI;
-
     private final AuditLogServiceI auditLogServiceI;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtService jwtService, UserServiceI userServiceI, AuditLogServiceI auditLogServiceI) {
+    public AuthController(AuthenticationManager authenticationManager,
+                          JwtService jwtService,
+                          UserServiceI userServiceI,
+                          AuditLogServiceI auditLogServiceI) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.userServiceI = userServiceI;
         this.auditLogServiceI = auditLogServiceI;
     }
 
-    @PostMapping(path = "/login", consumes="application/json")
-    public ResponseEntity<Map<String, String>> login(@Valid @RequestBody RequestDto requestDto){
-
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(requestDto.getUsername(), requestDto.getPassword());
-
-        Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+    // ---------------- LOGIN ----------------
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, String>> login(
+            @Valid @RequestBody RequestDto requestDto) {
 
         Map<String, String> response = new HashMap<>();
 
-        if(authentication.isAuthenticated()){
+        try {
+            Authentication authentication =
+                    authenticationManager.authenticate(
+                            new UsernamePasswordAuthenticationToken(
+                                    requestDto.getUsername(),
+                                    requestDto.getPassword()
+                            )
+                    );
 
-            String username = authentication.getName();
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String email = authentication.getName();
 
             String role = authentication.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .findFirst()
-                    .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
+                    .orElseThrow(() ->
+                            new ResourceNotFoundException("Role not found"));
 
-            // Always include role in response (remove "ROLE_" prefix)
-            String roleValue = role.replace("ROLE_", "");
+            String token = jwtService.generateToken(email, role);
 
-            if(!role.equals("ROLE_ADMIN")){
-                User user = userServiceI.findUserByUsername(username);
+            // USER AUDIT (NON-ADMIN)
+            if (!role.equals("ROLE_ADMIN")) {
 
-                auditLogServiceI.logInfo(user.getUserId(), user.getUsername(), Action.LOGIN, Module.USER_MODULE);
+                User user = userServiceI.findUserByEmail(email);
 
                 user.setLastLogin(LocalDateTime.now());
                 userServiceI.updateUser(user);
+
+                auditLogServiceI.logInfo(
+                        user.getUserId(),
+                        user.getUsername(),
+                        Action.LOGIN,
+                        Module.USER_MODULE
+                );
             }
 
-            response.put("role", roleValue);
-
-            String token = jwtService.generateToken(username, role);
-
             response.put("token", token);
+            response.put("role", role.replace("ROLE_", ""));
 
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }else {
-            response.put("message", "Invalid credentials");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            response.put("message", "Invalid email or password");
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(response);
         }
     }
 
-    @PostMapping(path = "/logout")
-    public ResponseEntity<String> logout(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    // ---------------- LOGOUT ----------------
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout() {
 
-        String role = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
 
-        if(!role.equals("ROLE_ADMIN")) {
-            User user = userServiceI.findUserByUsername(authentication.getName());
-            auditLogServiceI.logInfo(user.getUserId(), user.getUsername(), Action.LOGOUT, Module.USER_MODULE);
+        if (authentication != null && authentication.isAuthenticated()
+                && !"anonymousUser".equals(authentication.getPrincipal())) {
+
+            String role = authentication.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .findFirst()
+                    .orElse("ROLE_UNKNOWN");
+
+            if (!role.equals("ROLE_ADMIN")) {
+                User user = userServiceI.findUserByEmail(authentication.getName());
+
+                auditLogServiceI.logInfo(
+                        user.getUserId(),
+                        user.getUsername(),
+                        Action.LOGOUT,
+                        Module.USER_MODULE
+                );
+            }
         }
 
         SecurityContextHolder.clearContext();
-
-        return new ResponseEntity<String>(role.substring(5) + " logout successfully", HttpStatus.OK);
+        return ResponseEntity.ok("Logout successful");
     }
 }
